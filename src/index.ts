@@ -50,14 +50,14 @@ export default function(styleApi: IStyleAPI): IStyleItem[] {
     {separator: true},
 
     {
-      match: isLocal,
+      match: isLocalGql,
       sort: moduleName(naturally),
       sortNamedMembers: alias(unicode),
     },
     {separator: true},
 
     {
-      match: isLocalGql,
+      match: and(isLocal, not(isLocalGql)),
       sort: moduleName(naturally),
       sortNamedMembers: alias(unicode),
     },
