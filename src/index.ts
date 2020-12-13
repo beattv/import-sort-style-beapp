@@ -1,11 +1,15 @@
-import {IStyleAPI, IStyleItem} from "import-sort-style";
+import {IStyleAPI, IStyleItem} from 'import-sort-style';
+
+function isReact (imported) {
+  return imported.moduleName === 'react';
+}
 
 function isLocal (imported) {
-  return imported.moduleName.startsWith("app");
+  return imported.moduleName.startsWith('app');
 }
 
 function isLocalGql (imported) {
-  return imported.moduleName.startsWith("app/gql");
+  return imported.moduleName.startsWith('app/gql');
 }
 
 export default function(styleApi: IStyleAPI): IStyleItem[] {
@@ -25,25 +29,28 @@ export default function(styleApi: IStyleAPI): IStyleItem[] {
   } = styleApi;
 
   return [
-    // import "foo"
-    {match: and(hasNoMember, isAbsoluteModule)},
+    {match: isReact},
     {separator: true},
 
-    // import "./foo"
-    {match: and(hasNoMember, isRelativeModule)},
+    // import 'foo'
+    {match: and(hasNoMember, isAbsoluteModule, not(isReact))},
     {separator: true},
 
-    // import … from "fs";
+    // import './foo'
+    {match: and(hasNoMember, isRelativeModule, not(isReact))},
+    {separator: true},
+
+    // import … from 'fs';
     {
-      match: isNodeModule,
+      match: and(isNodeModule, not(isReact)),
       sort: moduleName(naturally),
       sortNamedMembers: alias(unicode),
     },
     {separator: true},
 
-    // import … from "foo";
+    // import … from 'foo';
     {
-      match: and(isAbsoluteModule, not(or(isLocal, isLocalGql))),
+      match: and(isAbsoluteModule, not(or(isLocal, isLocalGql, isReact))),
       sort: moduleName(naturally),
       sortNamedMembers: alias(unicode),
     },
@@ -63,8 +70,8 @@ export default function(styleApi: IStyleAPI): IStyleItem[] {
     },
     {separator: true},
 
-    // import … from "./foo";
-    // import … from "../foo";
+    // import … from './foo';
+    // import … from '../foo';
     {
       match: isRelativeModule,
       sort: [dotSegmentCount, moduleName(naturally)],
