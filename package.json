@@ -1,6 +1,6 @@
 {
   "name": "import-sort-style-beapp",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "description": "BeApp's personal import-sort style",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
