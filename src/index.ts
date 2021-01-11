@@ -54,7 +54,7 @@ export default function(styleApi: IStyleAPI): IStyleItem[] {
 
     // import … from 'foo';
     {
-      match: and(isAbsoluteModule, not(or(isLocal, isLocalGql, isReact))),
+      match: and(isAbsoluteModule, not(or(isLocal, isLocalGql, isReact, isStatic))),
       sort: moduleName(naturally),
       sortNamedMembers: alias(unicode),
     },
@@ -68,14 +68,14 @@ export default function(styleApi: IStyleAPI): IStyleItem[] {
     {separator: true},
 
     {
-      match: and(isLocal, not(isLocalGql)),
+      match: isStatic,
       sort: moduleName(naturally),
       sortNamedMembers: alias(unicode),
     },
     {separator: true},
 
     {
-      match: isStatic,
+      match: and(isLocal, not(or(isLocalGql, isStatic))),
       sort: moduleName(naturally),
       sortNamedMembers: alias(unicode),
     },
