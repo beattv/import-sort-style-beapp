@@ -5,11 +5,15 @@ function isReact (imported) {
 }
 
 function isLocal (imported) {
-  return imported.moduleName.startsWith('app');
+  return imported.moduleName.startsWith('beapp');
 }
 
 function isLocalGql (imported) {
-  return imported.moduleName.startsWith('app/gql');
+  return imported.moduleName.startsWith('beapp/gql');
+}
+
+function isStatic (imported) {
+  return imported.moduleName.startsWith('beapp/static');
 }
 
 export default function(styleApi: IStyleAPI): IStyleItem[] {
@@ -65,6 +69,13 @@ export default function(styleApi: IStyleAPI): IStyleItem[] {
 
     {
       match: and(isLocal, not(isLocalGql)),
+      sort: moduleName(naturally),
+      sortNamedMembers: alias(unicode),
+    },
+    {separator: true},
+
+    {
+      match: isStatic,
       sort: moduleName(naturally),
       sortNamedMembers: alias(unicode),
     },
